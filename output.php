@@ -5,17 +5,16 @@ function ical_events_shortcode() {
     $events = get_option('ical_fetched_events', []);
 
     if (empty($events)) {
-        return '<p>' . __('No upcoming events.') . '</p>';
+        return '<p>' . __('No upcoming events.','ical-calendar') . '</p>';
     }
 
-
-    register_setting('ical_calendar_options', 'config_column_date');
-    register_setting('ical_calendar_options', 'config_column_group');
-    register_setting('ical_calendar_options', 'config_column_summary');
-    register_setting('ical_calendar_options', 'config_column_level');
-    register_setting('ical_calendar_options', 'config_column_time');
-    register_setting('ical_calendar_options', 'config_column_location');
-    register_setting('ical_calendar_options', 'config_column_contact');
+    register_setting('ical_calendar_options', 'config_column_date', 'sanitize_text_field'); 
+    register_setting('ical_calendar_options', 'config_column_group', 'sanitize_text_field'); 
+    register_setting('ical_calendar_options', 'config_column_summary', 'sanitize_text_field');
+    register_setting('ical_calendar_options', 'config_column_level', 'sanitize_text_field');
+    register_setting('ical_calendar_options', 'config_column_time', 'sanitize_text_field');
+    register_setting('ical_calendar_options', 'config_column_location', 'sanitize_text_field');
+    register_setting('ical_calendar_options', 'config_column_contact', 'sanitize_text_field');
 
     $output = '<table>';
     $output .= '<thead><tr>
@@ -29,8 +28,7 @@ function ical_events_shortcode() {
     </tr></thead>';
     $month = "";
     foreach ($events as $event) {
-
-        //
+        
         $config_keep_duration = get_option('config_keep_duration');
         $keep_duration = (int)$config_keep_duration * 60 * 60 * 24;
         $now = new DateTime();

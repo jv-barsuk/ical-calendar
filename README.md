@@ -1,6 +1,14 @@
-# About
-
-iCal Calendar fetches events from an .ical/.ics URL and displays them as a table on your WordPress page.
+# iCal Calendar
+Contributors: @me1es
+Donate link: 
+Tags: "events" "google calendar" "iCalendar" "office 365" "ical" "ics" "ical feed"
+Requires at least: 4.7
+Tested up to: 6.7.2
+Stable tag: 1.0
+Requires PHP: 7.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+iCal Calendar is a WordPress Plugin that fetches events from an .ical/.ics URL and displays them as a table on your WordPress page.
 
 ## Usage
 

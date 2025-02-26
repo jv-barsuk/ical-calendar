@@ -1,7 +1,7 @@
 <?php
 
 function ical_calendar_enqueue_admin_styles() {
-    wp_enqueue_style('ical-calendar-admin-styles', plugin_dir_url(__FILE__) . 'css/admin.css');
+    wp_enqueue_style('ical-calendar-admin-styles', plugin_dir_url(__FILE__) . 'css/admin.css', array(), ICAL_CALENDAR_PLUGIN_VERSION, 'all');
 }
 add_action('admin_enqueue_scripts', 'ical_calendar_enqueue_admin_styles');
 
@@ -9,14 +9,14 @@ add_action('admin_enqueue_scripts', 'ical_calendar_enqueue_admin_styles');
 function ical_calendar_settings_page() {
     ?>
     <div class="wrap">
-        <h1><?php _e("iCal Calendar Settings"); ?></h1>
+        <h1><?php esc_html_e("iCal Calendar Settings",'ical-calendar'); ?></h1>
         <form method="post">
-            <?php wp_nonce_field('ical_fetch_nonce'); //value to validate that it was sent from admin?>
-            <input type="hidden" name="ical_fetch_trigger" value="1">
-            <?php submit_button(__('Reload iCal Events from URL')); ?>
+            <?php wp_nonce_field(-1, 'ical_calendar_nonce_update_ical'); //value to validate that it was sent from admin?>
+            <input type="hidden" name="ical_calendar_update_ical" value="1">
+            <?php submit_button(__('Reload iCal Events from URL','ical-calendar')); ?>
             <span>Last updated: <?php 
                 $dt = new IntlDateFormatter(get_locale(),IntlDateFormatter::FULL,IntlDateFormatter::NONE,null,IntlDateFormatter::GREGORIAN,"YYYY-MM-dd HH:mm");
-                echo $dt->format(get_option('config_last_update'));?>
+                echo esc_html($dt->format(get_option('config_last_update')));?>
             </span>
         </form>
         <hr/>
@@ -30,47 +30,49 @@ function ical_calendar_settings_page() {
             $config_date_format = get_option('config_date_format', 'E d. MMM');
 
             ?>
+            <?php wp_nonce_field(-1,'ical_calendar_nonce_save_settings'); //value to validate that it was sent from admin?>
+            <input type="hidden" name="ical_calendar_save_settings" value="1">
             <table class="form-table">
                 <tr valign="top">
-                    <th scope="row"><?php _e('iCal Link');?></th>
+                    <th scope="row"><?php esc_html_e('iCal Link','ical-calendar');?></th>
                     <td>
                         <input type="text" name="ical_url" value="<?php echo esc_attr($ical_url); ?>" size="50" />
-                        <p class="tagline-description"><?php _e('URL of a .ical/.ics file to fetch the events from');?></p>
+                        <p class="tagline-description"><?php esc_html_e('URL of a .ical/.ics file to fetch the events from','ical-calendar');?></p>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php _e('Hide events older than (days)');?></th>
+                    <th scope="row"><?php esc_html_e('Hide events older than (days)','ical-calendar');?></th>
                     <td>
                         <input type="text" name="config_keep_duration" value="<?php echo esc_attr(get_option('config_keep_duration')); ?>"/>
-                        <p class="tagline-description"><?php _e('Events older than this value in days will not be shown. Leave empty to disable.');?></p>
+                        <p class="tagline-description"><?php esc_html_e('Events older than this value in days will not be shown. Leave empty to disable.','ical-calendar');?></p>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php _e('Show events after');?></th>
+                    <th scope="row"><?php esc_html_e('Show events after','ical-calendar');?></th>
                     <td>
                         <input type="text" name="config_first_date" placeholder="YYYY-MM-DD" value="<?php echo esc_attr($config_first_date); ?>"/>
-                        <p class="tagline-description"><?php _e('All events before this date will not be displayed. If empty all events are shown.');?></p>
+                        <p class="tagline-description"><?php esc_html_e('All events before this date will not be displayed. If empty all events are shown.','ical-calendar');?></p>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php _e('Show events before');?></th>
+                    <th scope="row"><?php esc_html_e('Show events before','ical-calendar');?></th>
                     <td>
                         <input type="text" name="config_last_date" placeholder="YYYY-MM-DD" value="<?php echo esc_attr($config_last_date); ?>"/>
-                        <p class="tagline-description"><?php _e('All events after this date will not be displayed. If empty all events are shown.');?></p>
+                        <p class="tagline-description"><?php esc_html_e('All events after this date will not be displayed. If empty all events are shown.','ical-calendar');?></p>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php _e('Date format');?></th>
+                    <th scope="row"><?php esc_html_e('Date format','ical-calendar');?></th>
                     <td>
                         <input type="text" name="config_date_format" value="<?php echo esc_attr($config_date_format); ?>"/>
-                        <p class="tagline-description"><?php _e('e.g. E > day of the week (short); d > day of the month; M > month numeric; MMM > month short abbreviation; YYYY > year');?></p>
+                        <p class="tagline-description"><?php esc_html_e('e.g. E > day of the week (short); d > day of the month; M > month numeric; MMM > month short abbreviation; YYYY > year','ical-calendar');?></p>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php _e('Group month');?></th>
+                    <th scope="row"><?php esc_html_e('Group month','ical-calendar');?></th>
                     <td>
                         <input type="checkbox" name="config_group_month" value="1" <?php checked(get_option('config_group_month'), 1); ?> />
-                        <p class="tagline-description"><?php _e('Enable grouping events by month');?></p>
+                        <p class="tagline-description"><?php esc_html_e('Enable grouping events by month','ical-calendar');?></p>
                     </td>
                 </tr>
                 <tr valign="top">
@@ -88,7 +90,7 @@ function ical_calendar_settings_page() {
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php _e('Labels');?></th>
+                    <th scope="row"><?php esc_html_e('Labels','ical-calendar');?></th>
                     <td>
                         <textarea name="config_event_labels" rows="10" cols="50"><?php echo esc_attr(get_option('config_event_labels')); ?></textarea>
                         <p class="tagline-description">Use the format label_to_replace;tooltip text;replacement (can be an icon)</p>
@@ -150,28 +152,48 @@ add_action('admin_init', 'ical_calendar_register_settings');
  * Register the options which can be saved in the settings
  */
 function ical_calendar_register_settings() {
-    // Check if the button is clicked
-    if (isset($_POST['ical_fetch_trigger']) && check_admin_referer('ical_fetch_nonce')) {
+    if (isset($_POST['ical_calendar_update_ical']) && check_admin_referer(-1, 'ical_calendar_nonce_update_ical')) {
         ical_fetch_and_store_events(); // Manually trigger the function
-        echo '<div class="updated"><p>' . __('iCal events fetched successfully!') . '</p></div>';
+        echo '<div class="updated"><p>' . esc_html(__('iCal events fetched successfully!','ical-calendar')) . '</p></div>';
     }
 
-    register_setting('ical_calendar_options', 'ical_url'); //TODO: validate if url
-    register_setting('ical_calendar_options', 'config_first_date'); //TODO: validate if date
-    register_setting('ical_calendar_options', 'config_last_date'); //TODO: validate if date
-    register_setting('ical_calendar_options', 'config_date_format'); //TODO: validate if date format
-    register_setting('ical_calendar_options', 'config_column_date');
-    register_setting('ical_calendar_options', 'config_column_labels');
-    register_setting('ical_calendar_options', 'config_column_summary');
-    register_setting('ical_calendar_options', 'config_column_level');
-    register_setting('ical_calendar_options', 'config_column_time');
-    register_setting('ical_calendar_options', 'config_column_location');
-    register_setting('ical_calendar_options', 'config_column_contact');
-    register_setting('ical_calendar_options', 'config_event_labels');
-    register_setting('ical_calendar_options', 'config_keep_duration'); //validate if number
-    register_setting('ical_calendar_options', 'config_group_month'); // validate if bool
+    if (isset($_POST['ical_calendar_save_settings']) && check_admin_referer(-1, 'ical_calendar_nonce_save_settings')) {
+
+        ical_fetch_and_store_events();
+
+        register_setting('ical_calendar_options', 'ical_url', 'esc_url'); // Sanitize URL)
+        register_setting('ical_calendar_options', 'config_first_date', 'ical_calendar_sanitize_date'); // Custom date validation)
+        register_setting('ical_calendar_options', 'config_last_date', 'ical_calendar_sanitize_date'); // Custom date validation)
+        register_setting('ical_calendar_options', 'config_date_format', 'sanitize_text_field'); // Sanitize as text)
+        register_setting('ical_calendar_options', 'config_column_date', 'sanitize_text_field'); // Sanitize as text)
+        register_setting('ical_calendar_options', 'config_column_labels', 'sanitize_text_field'); // Sanitize as text)
+        register_setting('ical_calendar_options', 'config_column_summary', 'sanitize_text_field'); // Sanitize as text)
+        register_setting('ical_calendar_options', 'config_column_level', 'sanitize_text_field'); // Sanitize as text)
+        register_setting('ical_calendar_options', 'config_column_time', 'sanitize_text_field'); // Sanitize as text)
+        register_setting('ical_calendar_options', 'config_column_location', 'sanitize_text_field'); // Sanitize as text)
+        register_setting('ical_calendar_options', 'config_column_contact', 'sanitize_text_field'); // Sanitize as text)
+        register_setting('ical_calendar_options', 'config_event_labels', 'sanitize_textarea_field'); // Sanitize as text)
+        register_setting('ical_calendar_options', 'config_keep_duration', 'ical_calendar_sanitize_number'); // Custom number validation)
+        register_setting('ical_calendar_options', 'config_group_month', 'ical_calendar_sanitize_checkbox'); // Validate as a boolean (checkbox)
+
+    }    
 }
 
+// Custom sanitization function for date
+function ical_calendar_sanitize_date($input) {
+    $date = DateTime::createFromFormat('Y-m-d', $input);
+    return $date ? $date->format('Y-m-d') : '';
+}
+
+// Custom sanitization function for numbers
+function ical_calendar_sanitize_number($input) {
+    return is_numeric($input) ? intval($input) : ""; // Return the number or 0 if not valid
+}
+
+// Custom sanitization function for checkboxes
+function ical_calendar_sanitize_checkbox($input) {
+    return ($input === '1' ? '1' : '0'); // Return '1' if checked, '0' otherwise
+}
 
 
 // Hook to create a menu item in the admin area

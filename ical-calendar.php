@@ -4,7 +4,12 @@
  * Description: Fetches an iCal (.ical/.ics) file from an URL and displays the events using a shortcode.
  * Version: 1.0
  * Author: me1es
+ * Text Domain: ical-calendar
+ * License: GPL-2.0-or-later
+ * License URI: https://opensource.org/licenses/GPL-2.0
  */
+
+ define('ICAL_CALENDAR_PLUGIN_VERSION', '1.0.0');
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -18,7 +23,7 @@ require_once plugin_dir_path(__FILE__) . 'output.php'; // Output the data in fro
 
 // Register and enqueue the plugin stylesheet
 function ical_calendar_enqueue_styles() {
-    wp_enqueue_style('ical-calendar-styles', plugin_dir_url(__FILE__) . 'css/style.css');
+    wp_enqueue_style('ical-calendar-styles', plugin_dir_url(__FILE__) . 'css/style.css', array(), ICAL_CALENDAR_PLUGIN_VERSION, 'all');
 }
 // Hook the function to load styles in the frontend
 add_action('wp_enqueue_scripts', 'ical_calendar_enqueue_styles');

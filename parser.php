@@ -25,11 +25,7 @@ function ical_fetch_and_store_events() {
 function ical_parse_events($ical_content) {
     $events = [];
     preg_match_all('/BEGIN:VEVENT.*?END:VEVENT/s', $ical_content, $matches);
-    error_log("#################################################################################");
-    error_log($ical_content);
     foreach ($matches[0] as $event_data) {
-        error_log("#################################################################################");
-        error_log($event_data);
         preg_match('/SUMMARY:(.*)/', $event_data, $summary);
         // TODO: Timezone not considered: DTSTART;TZID=Europe/Berlin:20241021T183000
         preg_match('/DTSTART.*?:(\d{8}(T\d{6}Z?)?)/', $event_data, $start); 
@@ -139,5 +135,5 @@ function ical_format_date($ical_date, $date_format) {
  * Function to format iCal time
  */
 function ical_format_time($ical_date) {
-    return date('H:i', strtotime($ical_date));
+    return gmdate('H:i', strtotime($ical_date));
 }
