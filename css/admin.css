@@ -1,0 +1,32 @@
+.ical-calendar-arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #000;
+  margin-right: 10px;
+  rotate: 90deg;
+  padding-bottom: 7px;
+}
+.ical-calendar-arrow.active {
+  rotate: 180deg;
+  padding-bottom: 3px;
+}
+
+.toggle-content {
+  display: none;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.toggle-header {
+  cursor: pointer;
+  background: #f1f1f1;
+  padding: 10px;
+}
+
+table th {
+  text-align: left;
+  padding: 0.3em;
+}/*# sourceMappingURL=admin.css.map */

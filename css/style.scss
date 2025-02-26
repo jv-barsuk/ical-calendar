@@ -1,0 +1,132 @@
+tr.month_separator {
+    td {
+        padding-top: 2em;
+        border-bottom: 1px solid lightgrey;
+        font-weight: bold;
+    }
+}
+
+th {
+    text-align: left;
+}
+
+.location, .start_time, .contact {
+    font-size: small;
+}
+
+tr:not(.month_separator):hover td {
+    background-color: #eeeeee; //var(--wp--preset--color--base);
+}
+
+table {
+    border: 0px;
+    border-collapse: collapse;
+    tr {
+        td {
+            padding-right:0.5em;
+            &.date {
+                width: 10em;
+            }
+            &.labels {
+                width: 5em;
+                justify-content: flex-end;
+            }
+            &:focus {
+                outline: none; /* Removes the default focus border */
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    
+    thead {
+        display: none; /* Hide the header on small screens */
+    }
+
+    tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        grid-auto-flow: row; 
+
+        margin-bottom: 10px; /* Space between rows */
+        border-bottom: 1px solid #ccc; /* Optional: border for each cell block */
+    
+
+        td {
+            display: flex;
+            justify-content: space-between;
+            border: none;
+            position: relative;
+            text-align: left; /* Align text left */
+            font-size: var(--wp--preset--font-size--normal);
+
+            &.labels {
+                white-space: nowrap;
+            }
+
+            &.date {
+                grid-column: 1;
+                grid-row: 1;
+            }
+        
+            &.labels {
+                grid-column: 2;
+                grid-row: 1;
+                justify-self: right;
+            }
+        
+            grid-column: span 2;
+        }
+    }
+
+    tr:not(.month_separator):hover td {
+        background-color: initial; //var(--wp--preset--color--base);
+    }
+
+
+    tr:focus-within {
+        td:focus {
+            outline: none; /* Removes the default focus border */
+        }
+        .location, .start_time, .contact {
+            display: flex;
+        }
+        td {
+            background-color: initial;
+        }
+        td:nth-child(3)::after {
+            content: ""
+          }
+      }
+
+      tr td.summary::after {
+        content: "›"
+      }
+
+      .location, .start_time, .contact {
+        display: none;
+      }
+
+    .location::before {
+        content: "📍";
+        filter: grayscale(100%);
+    }
+
+    .start_time::before {
+        content: "⏲";
+        filter: grayscale(100%);
+    }
+
+    .contact::before {
+        content: "👤";
+        filter: grayscale(100%);
+    }
+
+    .date {
+        font-size: small;
+    }
+}
+  
+
