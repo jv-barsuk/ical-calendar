@@ -36,7 +36,6 @@ Information parsed from Labels can be replaced by entering the desired informati
 
 - iCal Calendar does not yet support time zones.
 - Repeating events have not yet been tested.
-- After changing the settings, you might have to reload the data for the changes to take effect.
 
 ## Screenshots
 ![iCal Calendar Screenshot 1](screenshots/ical-calendar-01.png)
